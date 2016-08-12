@@ -1,0 +1,15 @@
+mkdir -p ~/bin/gcc-arm-embedded && cd "$_"
+wget https://launchpad.net/gcc-arm-embedded/4.8/4.8-2014-q2-update/+download/gcc-arm-none-eabi-4_8-2014q2-20140609-linux.tar.bz2
+tar xjf gcc-arm-none-eabi-*-linux.tar.bz2
+
+export PATH=$HOME/bin/gcc-arm-embedded/gcc-arm-none-eabi-4_8-2014q2/bin:$PATH
+
+sudo apt-get install  libusb-1.0-0-dev 
+install dfu-util 0.9
+
+
+cd /home/eedbhu/git/firmware
+make all PLATFORM=photon
+make APP=aFirst PLATFORM=photon
+
+dfu-util -d 0x2B04:0xD006 -a 0 -s 0x80A0000:leave -D ./build/target/user-part/platform-6-m/aFirst.bin
